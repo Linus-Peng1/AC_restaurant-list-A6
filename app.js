@@ -1,6 +1,7 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const exphbs = require('express-handlebars')
+const Restaurant = require('./models/restaurant')
 
 
 const port = 3000
@@ -29,7 +30,10 @@ app.use(express.static('public'))
 
 // 設定路由
 app.get('/', (req, res) => {
-  res.render('index')
+  Restaurant.find()
+    .lean()
+    .then(restaurant => res.render('index', { restaurant }))
+    .catch(error => console.log(error))
 })
 
 // 設定 port 3000
