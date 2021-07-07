@@ -36,6 +36,14 @@ app.get('/', (req, res) => {
     .catch(error => console.log(error))
 })
 
+app.get('/restaurants/:id', (req, res) => {
+  const id = req.params.id
+  Restaurant.findById(id)
+    .lean()
+    .then(restaurant => res.render('show', { restaurant }))
+    .catch(error => console.log(error))
+})
+
 // 設定 port 3000
 app.listen(port, () => {
   console.log(`App is running on https://localhost:${port}`)
