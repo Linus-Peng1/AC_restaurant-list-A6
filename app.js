@@ -5,7 +5,7 @@ const mongoose = require('mongoose')
 const port = 3000
 const app = express()
 
-mongoose.connect('mongodb://localhost/todo-list', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect('mongodb://localhost/restaurant-list', { useNewUrlParser: true, useUnifiedTopology: true })
 
 // 取得資料庫連線狀態
 const db = mongoose.connection
