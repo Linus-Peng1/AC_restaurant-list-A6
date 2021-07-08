@@ -36,6 +36,26 @@ app.get('/', (req, res) => {
     .catch(error => console.log(error))
 })
 
+app.get('/restaurants/search', (req, res) => {
+  const keyword = req.query.keyword.trim().toLowerCase()
+  if (keyword === "") {
+    return res.redirect('/')
+  }
+  Restaurant.find()
+    .lean()
+    .then((restaurants) => {
+      const restaurantSearch = restaurants.filter((item) => {
+        return item.name.toLowerCase().includes(keyword) || item.category.toLowerCase().includes(keyword)
+      })
+      if (restaurantSearch.length) {
+        res.render('index', { restaurant: restaurantSearch, keyword })
+      } else {
+        res.render('index', { noSearchResult: '<h3>沒有符合的搜尋結果</h3>', keyword })
+      }
+    })
+    .catch((error) => console.error(error))
+})
+
 app.get('/restaurants/:id', (req, res) => {
   const id = req.params.id
   Restaurant.findById(id)
