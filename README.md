@@ -48,7 +48,7 @@ npm install
 ```
 npm run dev
 ```
-出現下列訊息，表示啟動成功，可點選連結開啟網頁
+5. 出現下列訊息，表示啟動成功，可點選連結開啟網頁
 ```
-The server is running on http://localhost:3000
+App is running on http://localhost:3000
 ```
