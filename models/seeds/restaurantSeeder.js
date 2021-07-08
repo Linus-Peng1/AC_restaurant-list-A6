@@ -9,10 +9,9 @@ db.on('error', () => {
   console.log('mongodb error!')
 })
 db.once('open', () => {
-  console.log('mongodb connected!')
-
   restaurants.results.forEach((restaurant) => {
     Restaurant.create({
+      id: restaurant.id,
       name: restaurant.name,
       name_en: restaurant.name_en,
       category: restaurant.category,
@@ -24,6 +23,6 @@ db.once('open', () => {
       description: restaurant.description
     })
   })
-  // console.log('done')
-  
+  console.log('seeder done!')
+
 })
