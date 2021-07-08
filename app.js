@@ -2,6 +2,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 const exphbs = require('express-handlebars')
 const Restaurant = require('./models/restaurant')
+const bodyParser = require('body-parser')
 
 
 const port = 3000
@@ -28,12 +29,28 @@ app.set('view engine', 'hbs')
 // setting static files
 app.use(express.static('public'))
 
+app.use(bodyParser.urlencoded({ extended: true }))
+
 // 設定路由
 app.get('/', (req, res) => {
   Restaurant.find()
     .lean()
     .then(restaurant => res.render('index', { restaurant }))
     .catch(error => console.log(error))
+})
+
+app.get('/restaurants/new', (req, res) => {
+  return res.render('new')
+})
+
+app.post('/restaurants', (req, res) => {
+  const { name, name_en, category, location, phone, rating, google_map, image, description } = req.body
+  if (!name || !name_en || !category || !image || !location || !phone || !google_map || !rating || !description) {
+    return res.redirect('/restaurants/new')
+  }
+  return Restaurant.create({ name, name_en, category, location, phone, rating, google_map, image, description })
+    .then(() => res.redirect('/'))
+    .catch(error => console.error(error))
 })
 
 app.get('/restaurants/search', (req, res) => {

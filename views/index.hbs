@@ -38,8 +38,16 @@
                 {{this.rating}}
                 <i class="fas fa-star fa-xs"></i>
               </span>
-
             </div>
+
+            <div class="d-flex justify-content-center mb-3">
+              <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                <a class="btn btn-primary" href="./restaurants/{{this._id}}" role="button">Detail</a>
+                <a class="btn btn-warning" href="./restaurants/{{this._id}}/edit" role="button">Edit</a>
+                <a class="btn btn-danger" href="./restaurants/{{this._id}}/delete" role="button">Delete</a>
+              </div>
+            </div>
+
           </div>
         </a>
         {{/each}}
