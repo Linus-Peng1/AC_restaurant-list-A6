@@ -119,5 +119,5 @@ app.get('/restaurants/:id', (req, res) => {
 
 // 設定 port 3000
 app.listen(port, () => {
-  console.log(`App is running on https://localhost:${port}`)
+  console.log(`App is running on http://localhost:${port}`)
 })
