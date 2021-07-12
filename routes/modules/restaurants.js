@@ -19,14 +19,15 @@ router.get('/search', (req, res) => {
     .lean()
     .sort(sortMongoose[sortSelect])
     .then((restaurants) => {
-      const restaurantSearch = restaurants.filter((item) => {
-        return item.name.toLowerCase().includes(keyword) || item.category.toLowerCase().includes(keyword)
-      })
-      if (restaurantSearch.length) {
-        res.render('index', { restaurant: restaurantSearch, keyword, sortList, sortSelect })
-      } else {
+      if (keyword) {
+        restaurants = restaurants.filter((item) => {
+          return item.name.toLowerCase().includes(keyword) || item.category.toLowerCase().includes(keyword)
+        })
+      }
+      if (restaurants.length === 0) {
         res.render('index', { noSearchResult: '<h3>沒有符合的搜尋結果</h3>', keyword })
       }
+      res.render('index', { restaurant: restaurants, keyword, sortList, sortSelect })
     })
     .catch((error) => console.error(error))
 })
