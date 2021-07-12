@@ -2,6 +2,35 @@ const express = require('express')
 const router = express.Router()
 
 const Restaurant = require('../../models/restaurant')
+const sortList = require('../../config/sortList')
+
+router.get('/search', (req, res) => {
+  const keyword = req.query.keyword.trim().toLowerCase()
+  const sortSelect = req.query.sortSelect
+  const sortMongoose = {
+    nameAsc: { name_en: 'asc' },
+    nameDesc: { name_en: 'desc' },
+    category: { category: 'asc' },
+    location: { location: 'asc' },
+    rating: { rating: 'desc' }
+  }
+
+  Restaurant.find()
+    .lean()
+    .sort(sortMongoose[sortSelect])
+    .then((restaurants) => {
+      const restaurantSearch = restaurants.filter((item) => {
+        return item.name.toLowerCase().includes(keyword) || item.category.toLowerCase().includes(keyword)
+      })
+      if (restaurantSearch.length) {
+        res.render('index', { restaurant: restaurantSearch, keyword, sortList, sortSelect })
+      } else {
+        res.render('index', { noSearchResult: '<h3>沒有符合的搜尋結果</h3>', keyword })
+      }
+    })
+    .catch((error) => console.error(error))
+})
+
 
 router.get('/new', (req, res) => {
   return res.render('new')
@@ -53,25 +82,7 @@ router.delete('/:id', (req, res) => {
     .catch(error => console.log(error))
 })
 
-router.get('/search', (req, res) => {
-  const keyword = req.query.keyword.trim().toLowerCase()
-  if (keyword === "") {
-    return res.redirect('/')
-  }
-  Restaurant.find()
-    .lean()
-    .then((restaurants) => {
-      const restaurantSearch = restaurants.filter((item) => {
-        return item.name.toLowerCase().includes(keyword) || item.category.toLowerCase().includes(keyword)
-      })
-      if (restaurantSearch.length) {
-        res.render('index', { restaurant: restaurantSearch, keyword })
-      } else {
-        res.render('index', { noSearchResult: '<h3>沒有符合的搜尋結果</h3>', keyword })
-      }
-    })
-    .catch((error) => console.error(error))
-})
+
 
 router.get('/:id', (req, res) => {
   const id = req.params.id

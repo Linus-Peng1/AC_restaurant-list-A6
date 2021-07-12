@@ -3,12 +3,18 @@ const exphbs = require('express-handlebars')
 const bodyParser = require('body-parser')
 const methodOverride = require('method-override')
 const routes = require('./routes/index')
+const handlebarsHelpers = require('./utils/handlebarsHelpers')
 
 const port = 3000
 const app = express()
 
 // 設定 handlebars
-app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
+
+app.engine('hbs', exphbs({
+  defaultLayout: 'main',
+  extname: '.hbs',
+  helpers: require('./utils/handlebarsHelpers')
+}))
 app.set('view engine', 'hbs')
 
 app.use(express.static('public')) // setting static files
