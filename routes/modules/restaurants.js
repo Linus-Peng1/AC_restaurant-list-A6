@@ -32,7 +32,6 @@ router.get('/search', (req, res) => {
     .catch((error) => console.error(error))
 })
 
-
 router.get('/new', (req, res) => {
   return res.render('new')
 })
@@ -82,8 +81,6 @@ router.delete('/:id', (req, res) => {
     .then(() => res.redirect('/'))
     .catch(error => console.log(error))
 })
-
-
 
 router.get('/:id', (req, res) => {
   const id = req.params.id
