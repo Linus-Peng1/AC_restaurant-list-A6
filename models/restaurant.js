@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
+
 const restaurantSchema = new Schema({
   sourceId: {
     type: String
@@ -40,4 +41,5 @@ const restaurantSchema = new Schema({
     required: true
   }
 })
+
 module.exports = mongoose.model('Restaurant', restaurantSchema)
