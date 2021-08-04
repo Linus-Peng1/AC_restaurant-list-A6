@@ -1,22 +1,47 @@
-const Restaurant = require('../restaurant') // 載入 restaurant model
-const restaurants = require('./restaurant.json') // 載入 restaurant.json
+const bcrypt = require('bcryptjs')
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
+
+const Restaurant = require('../restaurant')
+const User = require('../user')
+const restaurantList = require('../../restaurant.json').results // 載入 restaurant.json
 const db = require('../../config/mongoose')
 
-db.once('open', () => {
-  restaurants.results.forEach((restaurant) => {
-    Restaurant.create({
-      id: restaurant.sourceId,
-      name: restaurant.name,
-      name_en: restaurant.name_en,
-      category: restaurant.category,
-      image: restaurant.image,
-      location: restaurant.location,
-      phone: restaurant.phone,
-      google_map: restaurant.google_map,
-      rating: restaurant.rating,
-      description: restaurant.description
-    })
-  })
-  console.log('seeder done!')
+const SEED_USERS = [{
+  name: 'user1',
+  email: 'user1@example.com',
+  password: '12345678',
+  haveRestaurantId: [1, 2, 3]
+},
+{
+  name: 'user2',
+  email: 'user2@example.com',
+  password: '12345678',
+  haveRestaurantId: [4, 5, 6]
+}]
 
+db.once('open', () => {
+  Promise.all(Array.from(SEED_USERS, (SEED_USER, i) => {
+    return bcrypt
+      .genSalt(10)
+      .then(salt => bcrypt.hash(SEED_USER.password, salt))
+      .then(hash =>
+        User.create({
+          name: SEED_USER.name,
+          email: SEED_USER.email,
+          password: hash
+        }))
+      .then(user => {
+        const userId = user._id
+        const restaurants = restaurantList.filter(restaurant => SEED_USER.haveRestaurantId.includes(restaurant.id))
+        restaurants.forEach(restaurant => restaurant.userId = userId)
+        return Restaurant.create(restaurants)
+      })
+  }))
+    .then(() => {
+      console.log('seeder done.')
+      process.exit()
+    })
+    .catch(error => console.log(error))
 })
