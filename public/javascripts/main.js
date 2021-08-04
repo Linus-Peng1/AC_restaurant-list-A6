@@ -1,4 +1,4 @@
-const form = document.querySelector('#form')
+const form = document.querySelector('.needs-validate')
 const submitButton = document.querySelector('#submit-btn')
 
 form.addEventListener('submit', function onFormSubmitted(event) {

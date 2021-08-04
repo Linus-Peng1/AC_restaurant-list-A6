@@ -20,16 +20,35 @@ router.get('/register', (req, res) => {
 
 router.post('/register', (req, res) => {
   const { name, email, password, confirmPassword } = req.body
+  const errors = []
 
-  // 檢查使用者是否已經註冊
+  // 檢查使用者輸入資料
+  if (!name || !email || !password || !confirmPassword) {
+    errors.push({ 'message': '所有欄位都是必填。' })
+  }
+  if (password !== confirmPassword) {
+    errors.push({ 'message': '密碼與確認密碼不相符！' })
+  }
+  if (errors.length) {
+    return res.render('register', {
+      name,
+      email,
+      password,
+      confirmPassword,
+      errors
+    })
+  }
+
+  // 檢查使用者是否已經註冊過
   User.findOne({ email }).then(user => {
     if (user) {
-      console.log('此 eamil 已被註冊過!')
+      errors.push({ 'message': '此 eamil 已被註冊過！' })
       res.render('register', {
         name,
         email,
         password,
-        confirmPassword
+        confirmPassword,
+        errors
       })
     } else {
       return User.create({
@@ -45,6 +64,7 @@ router.post('/register', (req, res) => {
 
 router.get('/logout', (req, res) => {
   req.logout() // 為 Passport.js 提供的函式，會幫你清除 session
+  req.flash('success_msg', '您已經成功登出。')
   res.redirect('/users/login')
 })
 

@@ -1,7 +1,8 @@
 <div class="container-sm mt-3 ml-5">
   <div class="row">
     <div class="col-sm-6">
-      <form action="/restaurants/{{restaurant._id}}?_method=PUT" method="POST" id="form" novalidate>
+      <form action="/restaurants/{{restaurant._id}}?_method=PUT" method="POST" id="form" class="needs-validate"
+        novalidate>
         <div class="form-group">
           <label for="name">餐廳名稱</label>
           <input type="text" class="form-control" id="name" name="name" placeholder="請輸入餐廳名稱 ..."
