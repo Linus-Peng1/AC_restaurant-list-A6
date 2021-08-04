@@ -1,14 +1,13 @@
 const form = document.querySelector('.needs-validate')
 const submitButton = document.querySelector('#submit-btn')
 
-form.addEventListener('submit', function onFormSubmitted(event) {
+form.addEventListener('submit', function onFormSubmitted (event) {
   if (!form.checkValidity()) {
     event.stopPropagation()
     event.preventDefault()
-    alert('Form invalid')  //驗證不通過，就跳 alert
   }
 })
 
-submitButton.addEventListener('click', function onSubmitButtonClicked(event) {
+submitButton.addEventListener('click', function onSubmitButtonClicked (event) {
   form.classList.add('was-validated')
 })

@@ -6,7 +6,7 @@ const FacebookStrategy = require('passport-facebook').Strategy
 const User = require('../models/user')
 
 // 直接匯出一個匿名 function , 參數為 app
-module.exports = app => {
+module.exports = (app) => {
 
   // 初始化 Passport 模組
   app.use(passport.initialize())
@@ -57,7 +57,7 @@ module.exports = app => {
             .catch(err => done(err, false))
         })
     }
-  ));
+  ))
 
   // 設定序列化與反序列化
   passport.serializeUser((user, done) => {
